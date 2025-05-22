@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SalesReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL Connection"/>
+	<style name="Title" fontName="Times New Roman" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="11"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="REPORT_TITLE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Laporan Transaksi Sales"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT sr.no_sales, sr.date, sr.deskripsi, u.username as operator_name, p.name as partner_name, sr.qty, sr.price, sr.discount, sr.total
+FROM tb_sales_request sr
+LEFT JOIN tb_users u ON sr.id_operator = u.id
+LEFT JOIN tb_partner p ON sr.id_partner = p.id
+ORDER BY sr.date DESC]]>
+	</queryString>
+	<field name="no_sales" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="no_sales"/>
+		<property name="com.jaspersoft.studio.field.label" value="no_sales"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="date"/>
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="deskripsi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="deskripsi"/>
+		<property name="com.jaspersoft.studio.field.label" value="deskripsi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="operator_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="username"/>
+		<property name="com.jaspersoft.studio.field.label" value="operator_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_users"/>
+	</field>
+	<field name="partner_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="partner_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_partner"/>
+	</field>
+	<field name="qty" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qty"/>
+		<property name="com.jaspersoft.studio.field.label" value="qty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="price" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="price"/>
+		<property name="com.jaspersoft.studio.field.label" value="price"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="discount" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="discount"/>
+		<property name="com.jaspersoft.studio.field.label" value="discount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<field name="total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_sales_request"/>
+	</field>
+	<variable name="GRAND_TOTAL" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{date}.toLocalDateTime().toLocalDate()]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField pattern="yyyy-MM-dd">
+					<reportElement mode="Opaque" x="0" y="0" width="802" height="30" forecolor="#FFFFFF" backcolor="#294B88" uuid="c05d9b5a-5d04-4885-85ca-ae9f687a2f3e"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="16" isBold="true"/>
+						<paragraph leftIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="150" splitType="Stretch">
+			<!-- Logo Perusahaan -->
+			<image>
+				<reportElement x="0" y="0" width="100" height="100"/>
+				<imageExpression><![CDATA["src/assets/img/logo_perusahaan.png"]]></imageExpression>
+			</image>
+			
+			<!-- Nama Perusahaan -->
+			<textField>
+				<reportElement x="120" y="20" width="435" height="30"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cambria Math" size="28" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Seven Oceans"]]></textFieldExpression>
+			</textField>
+			
+			<!-- Nomor Telepon -->
+			<textField>
+				<reportElement x="120" y="50" width="435" height="20"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Telp: 085183386587"]]></textFieldExpression>
+			</textField>
+			
+			<!-- Garis Pemisah -->
+			<line>
+				<reportElement x="0" y="110" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+
+			<!-- Judul Laporan -->
+			<textField>
+				<reportElement x="0" y="120" width="802" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cambria Math" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Laporan Penjualanlala3\nSmartWare - Data Transaksi Penjualan"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="100" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="100" y="0" width="100" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="200" y="0" width="150" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deskripsi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="350" y="0" width="100" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operator]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="450" y="0" width="100" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="550" y="0" width="50" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="600" y="0" width="100" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="700" y="0" width="102" height="30" forecolor="#000000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="100" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_sales}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="100" y="0" width="100" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="200" y="0" width="150" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="350" y="0" width="100" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{operator_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="450" y="0" width="100" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partner_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="550" y="0" width="50" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="Detail" x="600" y="0" width="100" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="Detail" x="700" y="0" width="102" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="9" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="1" width="802" height="24" forecolor="#D0B48E" backcolor="#F2EBDF"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="760" y="2" width="40" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="680" y="2" width="80" height="20" forecolor="#736343"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Halaman "+$V{PAGE_NUMBER}+" dari"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50">
+			<staticText>
+				<reportElement x="550" y="10" width="150" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRAND TOTAL]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="700" y="10" width="102" height="30"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{GRAND_TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport> 

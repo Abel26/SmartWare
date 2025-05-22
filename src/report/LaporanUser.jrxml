@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="LaporanUser" 
+              pageWidth="595" 
+              pageHeight="842" 
+              columnWidth="555" 
+              leftMargin="20" 
+              rightMargin="20" 
+              topMargin="20" 
+              bottomMargin="20">
+              
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL Connection"/>
+    
+    <style name="Title" fontName="Times New Roman" fontSize="26" isBold="true"/>
+    <style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+    <style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+    <style name="Detail" fontName="Arial" fontSize="11"/>
+    
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+    
+    <queryString>
+        <![CDATA[
+        SELECT u.name, u.gender, r.name AS role_name 
+        FROM tb_users AS u 
+        INNER JOIN tb_role AS r ON u.id_role = r.id
+        ]]>
+    </queryString>
+    
+    <field name="name" class="java.lang.String"/>
+    <field name="gender" class="java.lang.String"/>
+    <field name="role_name" class="java.lang.String"/>
+    
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    
+    <title>
+        <band height="120" splitType="Stretch">
+            <!-- Logo Perusahaan -->
+            <image>
+                <reportElement x="0" y="0" width="100" height="100"/>
+                <imageExpression><![CDATA["src/assets/img/logo_perusahaan.png"]]></imageExpression>
+            </image>
+            
+            <!-- Nama Perusahaan -->
+            <textField>
+                <reportElement x="120" y="20" width="435" height="30"/>
+                <textElement textAlignment="Left">
+                    <font fontName="Cambria Math" size="28" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Seven Oceans"]]></textFieldExpression>
+            </textField>
+            
+            <!-- Nomor Telepon -->
+            <textField>
+                <reportElement x="120" y="50" width="435" height="20"/>
+                <textElement>
+                    <font fontName="Calibri" size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Telp: 085183386587"]]></textFieldExpression>
+            </textField>
+            
+            <!-- Garis Pemisah -->
+            <line>
+                <reportElement x="0" y="110" width="555" height="1"/>
+                <graphicElement>
+                    <pen lineWidth="2.0"/>
+                </graphicElement>
+            </line>
+        </band>
+    </title>
+    
+    <pageHeader>
+        <band height="40">
+            <textField>
+                <reportElement x="0" y="10" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Calibri" size="16" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["LAPORAN DATA PENGGUNA"]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+    
+    <columnHeader>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Calibri" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Nama]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="185" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Calibri" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Jenis Kelamin]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="370" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Calibri" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Role]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="Calibri"/>
+                    <paragraph leftIndent="5"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="185" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Calibri"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="370" y="0" width="185" height="20"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                    <topPen lineWidth="1.0"/>
+                    <leftPen lineWidth="1.0"/>
+                    <bottomPen lineWidth="1.0"/>
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Calibri"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{role_name}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    
+    <pageFooter>
+        <band height="30">
+            <textField>
+                <reportElement x="180" y="5" width="100" height="20"/>
+                <textElement textAlignment="Right">
+                    <font fontName="Calibri"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="280" y="5" width="100" height="20"/>
+                <textElement textAlignment="Left">
+                    <font fontName="Calibri"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport> 
