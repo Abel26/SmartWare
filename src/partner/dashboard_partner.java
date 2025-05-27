@@ -144,7 +144,7 @@ public class dashboard_partner extends javax.swing.JPanel {
         // TODO add your handling code here:
         utama.removeAll();
         
-        index_partner form_partner = new index_partner();
+        index_partner form_partner = new index_partner(utama);
         utama.add(form_partner);
         
         // Refresh panel utama

@@ -147,7 +147,7 @@ public class DashboardSku extends javax.swing.JPanel {
     private void btn_buat_skuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buat_skuActionPerformed
         utama.removeAll();
         
-        sku form_sku = new sku();
+        sku form_sku = new sku(utama);
         utama.add(form_sku);
         
         // Refresh panel utama

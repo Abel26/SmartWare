@@ -18,9 +18,11 @@ public class index_partner extends javax.swing.JPanel {
     /**
      * Creates new form index_partner
      */
-    public index_partner() {
+    public index_partner(javax.swing.JPanel utama) {
         initComponents();
+        this.utama = utama;
     }
+    private javax.swing.JPanel utama;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,6 +56,11 @@ public class index_partner extends javax.swing.JPanel {
 
         btn_back.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
         btn_back.setText("Back");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
 
         btn_submit.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
         btn_submit.setText("Submit");
@@ -145,6 +152,19 @@ public class index_partner extends javax.swing.JPanel {
     private void btn_submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_submitActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_submitActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        utama.removeAll();
+
+        // Tambahkan form_sales_request ke panel utama
+        dashboard_partner form = new dashboard_partner(utama);
+        utama.add(form);
+
+        // Refresh panel utama
+        utama.repaint();
+        utama.revalidate();
+    }//GEN-LAST:event_btn_backActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

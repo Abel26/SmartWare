@@ -24,12 +24,16 @@ public class form_sales_request extends javax.swing.JPanel {
 
     private Integer selectedPartnerId = null; // Untuk menyimpan ID partner yang dipilih
     private Integer selectedSkuId = null; // Untuk menyimpan ID sku yang dipilih
+    
+    private String usernameLogin;
 
     /**
      * Creates new form create
      */
-    public form_sales_request(String username) {
+    public form_sales_request(String username, javax.swing.JPanel utama) {
         initComponents();
+        this.utama = utama;
+        this.usernameLogin = username;
         
         name_operator.setText(username);
         addListeners();
@@ -78,6 +82,7 @@ public class form_sales_request extends javax.swing.JPanel {
             }
         });
     }
+    private javax.swing.JPanel utama;
 
     private void searchPartner() {
         String searchText = partner.getText().trim();
@@ -498,6 +503,15 @@ private void addListeners() {
     
     private void backActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        utama.removeAll();
+
+        // Tambahkan form_sales_request ke panel utama
+        dashboard form = new dashboard(usernameLogin, utama);
+        utama.add(form);
+
+        // Refresh panel utama
+        utama.repaint();
+        utama.revalidate();
     }
 
     private void categoryActionPerformed(java.awt.event.ActionEvent evt) {

@@ -26,13 +26,17 @@ import javax.swing.event.DocumentListener;
 public class form_production_request extends javax.swing.JPanel {
 
     private Integer selectedSkuId = null; // Untuk menyimpan ID sku yang dipilih
+    
+    private String usernameLogin;
 
     /**
      * Creates new form create
      */
-    public form_production_request(String username) {
+    public form_production_request(String username, javax.swing.JPanel utama) {
         initComponents();
 //        this.setExtendedState(JPanel.MAXIMIZED_BOTH);
+        this.utama = utama;
+        this.usernameLogin = username;
         
         name_operator.setText(username);
         
@@ -64,6 +68,7 @@ public class form_production_request extends javax.swing.JPanel {
             }
         });
     }
+    private javax.swing.JPanel utama;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,6 +137,11 @@ public class form_production_request extends javax.swing.JPanel {
 
         back.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
         back.setText("Kembali");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
 
         save.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
         save.setText("Simpan");
@@ -393,6 +403,19 @@ public class form_production_request extends javax.swing.JPanel {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        utama.removeAll();
+
+        // Tambahkan form_sales_request ke panel utama
+        dashboard form = new dashboard(usernameLogin, utama);
+        utama.add(form);
+
+        // Refresh panel utama
+        utama.repaint();
+        utama.revalidate();
+    }//GEN-LAST:event_backActionPerformed
 
     private void loadCategories() {
         try {
