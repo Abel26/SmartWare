@@ -28,6 +28,7 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -138,7 +139,31 @@ public class login extends javax.swing.JFrame {
             
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "Login Berhasil!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                // Membuat custom notification yang lebih modern
+                JOptionPane pane = new JOptionPane(
+                    "Selamat datang " + username + "!\nAnda berhasil masuk ke sistem.",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                
+                // Konfigurasi dialog agar lebih modern
+                javax.swing.JDialog dialog = pane.createDialog("Login Berhasil");
+                dialog.setModal(false); // Dialog tidak menghalangi aplikasi
+                dialog.setAlwaysOnTop(true);
+                
+                // Timer untuk menutup dialog otomatis setelah 2 detik
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(2000);
+                        dialog.dispose();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+                
+                // Tampilkan dialog
+                dialog.setVisible(true);
+                
+                // Langsung buka dashboard
                 dashboard d = new dashboard(username);
                 d.setLocationRelativeTo(null);
                 dispose();
