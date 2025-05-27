@@ -20,9 +20,13 @@ public class create extends javax.swing.JPanel {
     /**
      * Creates new form create
      */
-    public create() {
+    public create(javax.swing.JPanel utama) {
         initComponents();
+        
+        this.utama = utama;
     }
+    
+    private javax.swing.JPanel utama;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +91,11 @@ public class create extends javax.swing.JPanel {
 
         back.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
         back.setText("Kembali");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
 
         save.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
         save.setText("Simpan");
@@ -234,6 +243,19 @@ public class create extends javax.swing.JPanel {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        utama.removeAll();
+
+        // Tambahkan form_sales_request ke panel utama
+        dashboard_user form = new dashboard_user(utama);
+        utama.add(form);
+
+        // Refresh panel utama
+        utama.repaint();
+        utama.revalidate();
+    }//GEN-LAST:event_backActionPerformed
 
     public static String passwordHash(String password){
         try {

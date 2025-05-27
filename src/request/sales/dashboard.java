@@ -125,7 +125,7 @@ public class dashboard extends javax.swing.JPanel {
         utama.removeAll();
 
         // Tambahkan form_sales_request ke panel utama
-        form_sales_request form = new form_sales_request(usernameLogin);
+        form_sales_request form = new form_sales_request(usernameLogin, utama);
         utama.add(form);
 
         // Refresh panel utama

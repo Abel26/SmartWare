@@ -242,7 +242,7 @@ public class dashboard extends javax.swing.JPanel {
         utama.removeAll();
 
         // Tambahkan form_production_request ke panel utama
-        form_production_request form = new form_production_request(usernameLogin);
+        form_production_request form = new form_production_request(usernameLogin, utama);
         utama.add(form);
 
         // Refresh panel utama
