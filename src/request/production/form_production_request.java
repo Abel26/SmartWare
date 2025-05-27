@@ -384,7 +384,38 @@ public class form_production_request extends javax.swing.JPanel {
             stmt.executeUpdate();
 
             // Tampilkan pesan sukses
-            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil disimpan!", "Informasi", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            // Membuat custom notification yang modern untuk sukses menyimpan
+            JOptionPane pane = new JOptionPane(
+                "✓ Data pengajuan produksi berhasil disimpan!\nNo. Production: " + noProduction,
+                JOptionPane.INFORMATION_MESSAGE
+            );
+            
+            // Konfigurasi dialog agar lebih modern
+            javax.swing.JDialog dialog = pane.createDialog("Berhasil Disimpan");
+            dialog.setModal(false);
+            dialog.setAlwaysOnTop(true);
+            
+            // Timer untuk menutup dialog dan pindah ke dashboard setelah 2 detik
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                    dialog.dispose();
+                    
+                    // Pindah ke dashboard di thread utama
+                    java.awt.EventQueue.invokeLater(() -> {
+                        utama.removeAll();
+                        dashboard dash = new dashboard(usernameLogin, utama);
+                        utama.add(dash);
+                        utama.repaint();
+                        utama.revalidate();
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            
+            // Tampilkan dialog
+            dialog.setVisible(true);
 
             // Reset form setelah data disimpan
             resetForm();
