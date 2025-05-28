@@ -10,12 +10,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -42,15 +49,27 @@ public class dashboard_user extends javax.swing.JPanel {
     
     public void table() {
         DefaultTableModel table = new DefaultTableModel();
+        table.addColumn("ID");
         table.addColumn("Nama");
         table.addColumn("Jenis Kelamin");
         table.addColumn("Role");
+        table.addColumn("Aksi");
         table_user.setModel(table);
+        
+        // Set tinggi baris
+        table_user.setRowHeight(35);
+        
+        // Set lebar kolom
+        table_user.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        table_user.getColumnModel().getColumn(1).setPreferredWidth(150); // Nama
+        table_user.getColumnModel().getColumn(2).setPreferredWidth(100); // Jenis Kelamin
+        table_user.getColumnModel().getColumn(3).setPreferredWidth(100); // Role
+        table_user.getColumnModel().getColumn(4).setPreferredWidth(100); // Aksi
         
         Connection conn = new connection().connect();
         
         try {
-            String sql = "SELECT u.name, u.gender, r.name AS role_name " +
+            String sql = "SELECT u.id, u.name, u.gender, r.name AS role_name " +
                      "FROM tb_users AS u " +
                      "INNER JOIN tb_role AS r ON u.id_role = r.id";
             
@@ -59,14 +78,119 @@ public class dashboard_user extends javax.swing.JPanel {
             
             while (rs.next()) {
                 Object[] row = {
+                    rs.getString("id"),
                     rs.getString("name"),
                     rs.getString("gender"),
                     rs.getString("role_name"),
+                    "Hapus"
                 };
                 table.addRow(row);
             }
+
+            // Set custom renderer dan editor untuk kolom Aksi
+            table_user.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
+            table_user.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor());
+
         } catch (SQLException e){
             e.printStackTrace();
+        }
+    }
+
+    public void deleteData(String id) {
+        try {
+            Connection conn = new connection().connect();
+            if (conn != null) {
+                // Konfirmasi penghapusan
+                int confirm = JOptionPane.showConfirmDialog(this,
+                    "Apakah Anda yakin ingin menghapus user ini?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION);
+                
+                if (confirm == JOptionPane.YES_OPTION) {
+                    String sql = "DELETE FROM tb_users WHERE id = ?";
+                    PreparedStatement pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, id);
+                    
+                    int result = pstmt.executeUpdate();
+                    if (result > 0) {
+                        JOptionPane.showMessageDialog(this, 
+                            "User berhasil dihapus");
+                        table(); // Refresh tabel
+                    }
+                }
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error menghapus user: " + ex.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Inner class untuk render button
+    private class ButtonRenderer implements TableCellRenderer {
+        private JButton button;
+
+        public ButtonRenderer() {
+            button = new JButton("Hapus");
+            button.setBackground(new Color(220, 53, 69));
+            button.setForeground(Color.WHITE);
+            button.setFocusPainted(false);
+            button.setFont(new Font("Arial", Font.BOLD, 12));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            return button;
+        }
+    }
+
+    // Inner class untuk edit button
+    private class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+        private String id;
+        private boolean isPushed;
+
+        public ButtonEditor() {
+            super(new JCheckBox());
+            
+            button = new JButton("Hapus");
+            button.setBackground(new Color(220, 53, 69));
+            button.setForeground(Color.WHITE);
+            button.setFocusPainted(false);
+            button.setFont(new Font("Arial", Font.BOLD, 12));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                    deleteData(id);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            id = table.getValueAt(row, 0).toString();
+            isPushed = true;
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            isPushed = false;
+            return "Hapus";
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
         }
     }
 
