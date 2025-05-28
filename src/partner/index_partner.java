@@ -54,16 +54,16 @@ public class index_partner extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
         jLabel3.setText("Alamat");
 
-        btn_back.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
-        btn_back.setText("Back");
+        btn_back.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_back.setText("Kembali");
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
             }
         });
 
-        btn_submit.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
-        btn_submit.setText("Submit");
+        btn_submit.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_submit.setText("Simpan");
         btn_submit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_submitMouseClicked(evt);
@@ -86,10 +86,10 @@ public class index_partner extends javax.swing.JPanel {
                 .addGap(248, 248, 248)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(112, 112, 112)
+                        .addComponent(btn_back)
                         .addGap(50, 50, 50)
-                        .addComponent(btn_submit, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btn_submit))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel1)
                         .addGroup(layout.createSequentialGroup()

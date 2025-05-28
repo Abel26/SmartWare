@@ -62,13 +62,13 @@ public class login extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btn_login.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
-        btn_login.setText("Login");
+        btn_login.setText("Masuk");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_loginActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 83, 37));
+        jPanel2.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 410, 90, 37));
 
         username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
