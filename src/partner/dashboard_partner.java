@@ -19,6 +19,7 @@ import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import utils.TableUtil;
 
 /**
  *
@@ -45,8 +46,8 @@ public class dashboard_partner extends javax.swing.JPanel {
         table.addColumn("Aksi");
         table_partner.setModel(table);
 
-        // Set tinggi baris
-        table_partner.setRowHeight(35);
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_partner, jScrollPane1);
         
         // Set lebar kolom
         table_partner.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
@@ -129,8 +130,9 @@ public class dashboard_partner extends javax.swing.JPanel {
             button.setBackground(new Color(220, 53, 69));
             button.setForeground(Color.WHITE);
             button.setFocusPainted(false);
-            button.setFont(new Font("Arial", Font.BOLD, 12));
-            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            button.setPreferredSize(new Dimension(70, 30));
+            button.setFont(new Font("Arial", Font.BOLD, 11));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         }
 
         @Override
@@ -153,8 +155,9 @@ public class dashboard_partner extends javax.swing.JPanel {
             button.setBackground(new Color(220, 53, 69));
             button.setForeground(Color.WHITE);
             button.setFocusPainted(false);
-            button.setFont(new Font("Arial", Font.BOLD, 12));
-            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            button.setPreferredSize(new Dimension(70, 30));
+            button.setFont(new Font("Arial", Font.BOLD, 11));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             button.addActionListener(new ActionListener() {
                 @Override

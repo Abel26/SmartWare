@@ -20,9 +20,11 @@ import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import reports.SalesReportGenerator;  // Perubahan import
-import reports.SimpleReportViewer;    // Import untuk alternatif
-import reports.ProductionReportGenerator;  // Implied import for ProductionReportGenerator
+import reports.SalesReportGenerator;
+import reports.SimpleReportViewer;
+import reports.ProductionReportGenerator;
+import utils.TableUtil;
+import utils.TableCustom;
 
 /**
  *
@@ -37,43 +39,32 @@ public class dashboard_request_production extends javax.swing.JPanel {
         private JPanel panel;
         private JButton terimaButton;
         private JButton tolakButton;
-        private JButton hapusButton;
 
         public ButtonRenderer() {
             panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
+            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Kurangi spacing
             
             terimaButton = new JButton("Terima");
             tolakButton = new JButton("Tolak");
-            hapusButton = new JButton("Hapus");
             
             // Styling tombol Terima
             terimaButton.setBackground(new Color(40, 167, 69));
             terimaButton.setForeground(Color.WHITE);
             terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(85, 30));
+            terimaButton.setPreferredSize(new Dimension(70, 30));
             terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             // Styling tombol Tolak
             tolakButton.setBackground(new Color(220, 53, 69));
             tolakButton.setForeground(Color.WHITE);
             tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(85, 30));
+            tolakButton.setPreferredSize(new Dimension(70, 30));
             tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-            
-            // Styling tombol Hapus
-            hapusButton.setBackground(new Color(108, 117, 125));
-            hapusButton.setForeground(Color.WHITE);
-            hapusButton.setFocusPainted(false);
-            hapusButton.setPreferredSize(new Dimension(85, 30));
-            hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-            hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             panel.add(terimaButton);
             panel.add(tolakButton);
-            panel.add(hapusButton);
         }
 
         @Override
@@ -95,7 +86,7 @@ public class dashboard_request_production extends javax.swing.JPanel {
             super(new JCheckBox());
             
             panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
+            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
             
             terimaButton = new JButton("Terima");
             tolakButton = new JButton("Tolak");
@@ -105,25 +96,25 @@ public class dashboard_request_production extends javax.swing.JPanel {
             terimaButton.setBackground(new Color(40, 167, 69));
             terimaButton.setForeground(Color.WHITE);
             terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(85, 30));
+            terimaButton.setPreferredSize(new Dimension(70, 30));
             terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             // Styling tombol Tolak
             tolakButton.setBackground(new Color(220, 53, 69));
             tolakButton.setForeground(Color.WHITE);
             tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(85, 30));
+            tolakButton.setPreferredSize(new Dimension(70, 30));
             tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             // Styling tombol Hapus
             hapusButton.setBackground(new Color(108, 117, 125));
             hapusButton.setForeground(Color.WHITE);
             hapusButton.setFocusPainted(false);
-            hapusButton.setPreferredSize(new Dimension(85, 30));
+            hapusButton.setPreferredSize(new Dimension(70, 30));
             hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-            hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             terimaButton.addActionListener(new ActionListener() {
                 @Override
@@ -294,16 +285,16 @@ public class dashboard_request_production extends javax.swing.JPanel {
         
         table_sales.setModel(table);
         
-        // Set tinggi baris
-        table_sales.setRowHeight(40);
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_sales, jScrollPane1);
         
         // Set lebar kolom
-        table_sales.getColumnModel().getColumn(0).setPreferredWidth(100); // No Production
-        table_sales.getColumnModel().getColumn(1).setPreferredWidth(120); // Kategori
-        table_sales.getColumnModel().getColumn(2).setPreferredWidth(200); // Deskripsi
-        table_sales.getColumnModel().getColumn(3).setPreferredWidth(80);  // Kuantiti
-        table_sales.getColumnModel().getColumn(4).setPreferredWidth(120); // Status
-        table_sales.getColumnModel().getColumn(5).setPreferredWidth(280); // Aksi - diperlebar untuk 3 button
+        table_sales.getColumnModel().getColumn(0).setPreferredWidth(120); // No Production
+        table_sales.getColumnModel().getColumn(1).setPreferredWidth(150); // Kategori
+        table_sales.getColumnModel().getColumn(2).setPreferredWidth(250); // Deskripsi
+        table_sales.getColumnModel().getColumn(3).setPreferredWidth(100); // Kuantiti
+        table_sales.getColumnModel().getColumn(4).setPreferredWidth(150); // Status
+        table_sales.getColumnModel().getColumn(5).setPreferredWidth(200); // Aksi
 
         Connection conn = new connection().connect();
         if (conn == null) {
@@ -331,11 +322,13 @@ public class dashboard_request_production extends javax.swing.JPanel {
                     statusText = statusBool ? "Diterima" : "Ditolak";
                 }
                 
+                int qty = rs.getInt("qty");
+                
                 Object[] row = {
                     noProduction,
                     rs.getString("category_name"),
                     rs.getString("description"),
-                    rs.getString("qty"),
+                    String.format("%,d", qty),
                     statusText,
                     "Aksi"
                 };

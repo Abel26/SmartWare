@@ -20,9 +20,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import reports.SalesReportGenerator;  // Perubahan import
-import reports.SimpleReportViewer;    // Import untuk alternatif
+import reports.SalesReportGenerator;
+import reports.SimpleReportViewer;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -30,6 +29,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.BorderFactory;
+import utils.TableUtil;
+import utils.TableCustom;
 
 /**
  *
@@ -165,22 +166,22 @@ public class dashboard_request_sales extends javax.swing.JPanel {
         
         table_sales.setModel(table);
         
-        // Set tinggi baris
-        table_sales.setRowHeight(40);
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_sales, jScrollPane1);
         
         // Set lebar kolom
-        table_sales.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table_sales.getColumnModel().getColumn(1).setPreferredWidth(120);
-        table_sales.getColumnModel().getColumn(2).setPreferredWidth(150);
-        table_sales.getColumnModel().getColumn(3).setPreferredWidth(100);
-        table_sales.getColumnModel().getColumn(4).setPreferredWidth(100);
-        table_sales.getColumnModel().getColumn(5).setPreferredWidth(70);
-        table_sales.getColumnModel().getColumn(6).setPreferredWidth(100);
-        table_sales.getColumnModel().getColumn(7).setPreferredWidth(70);
-        table_sales.getColumnModel().getColumn(8).setPreferredWidth(100);
-        table_sales.getColumnModel().getColumn(9).setPreferredWidth(120);
-        table_sales.getColumnModel().getColumn(10).setPreferredWidth(280);
-        
+        table_sales.getColumnModel().getColumn(0).setPreferredWidth(100);  // No Sales
+        table_sales.getColumnModel().getColumn(1).setPreferredWidth(120);  // Waktu
+        table_sales.getColumnModel().getColumn(2).setPreferredWidth(200);  // Deskripsi
+        table_sales.getColumnModel().getColumn(3).setPreferredWidth(120);  // Operator
+        table_sales.getColumnModel().getColumn(4).setPreferredWidth(120);  // Tujuan
+        table_sales.getColumnModel().getColumn(5).setPreferredWidth(80);   // Kuantiti
+        table_sales.getColumnModel().getColumn(6).setPreferredWidth(100);  // Harga
+        table_sales.getColumnModel().getColumn(7).setPreferredWidth(80);   // Diskon
+        table_sales.getColumnModel().getColumn(8).setPreferredWidth(120);  // Total Harga
+        table_sales.getColumnModel().getColumn(9).setPreferredWidth(120);  // Status
+        table_sales.getColumnModel().getColumn(10).setPreferredWidth(250); // Aksi
+
         Connection conn = new connection().connect();
         if (conn == null) {
             System.out.println("Koneksi ke database gagal!");
@@ -208,6 +209,11 @@ public class dashboard_request_sales extends javax.swing.JPanel {
                     statusText = statusBool ? "Diterima" : "Ditolak";
                 }
                 
+                // Format currency and numbers
+                double price = rs.getDouble("price");
+                double discount = rs.getDouble("discount");
+                double total = rs.getDouble("total");
+                
                 Object[] row = {
                     noSales,       
                     rs.getString("date"),          
@@ -215,9 +221,9 @@ public class dashboard_request_sales extends javax.swing.JPanel {
                     rs.getString("operator_name"), 
                     rs.getString("partner_name"),    
                     rs.getInt("qty"),              
-                    rs.getDouble("price"),         
-                    rs.getDouble("discount"),      
-                    rs.getDouble("total"),
+                    String.format("Rp %,.0f", price),         
+                    String.format("%.1f%%", discount),      
+                    String.format("Rp %,.0f", total),
                     statusText,
                     "Aksi"
                 };
@@ -307,7 +313,7 @@ class ButtonRenderer implements TableCellRenderer {
 
     public ButtonRenderer() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0)); // Kurangi spacing antar button
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Kurangi spacing
         
         terimaButton = new JButton("Terima");
         tolakButton = new JButton("Tolak");
@@ -317,25 +323,25 @@ class ButtonRenderer implements TableCellRenderer {
         terimaButton.setBackground(new Color(40, 167, 69));
         terimaButton.setForeground(Color.WHITE);
         terimaButton.setFocusPainted(false);
-        terimaButton.setPreferredSize(new Dimension(85, 30));
+        terimaButton.setPreferredSize(new Dimension(70, 30));
         terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-        terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         // Styling tombol Tolak
         tolakButton.setBackground(new Color(220, 53, 69));
         tolakButton.setForeground(Color.WHITE);
         tolakButton.setFocusPainted(false);
-        tolakButton.setPreferredSize(new Dimension(85, 30));
+        tolakButton.setPreferredSize(new Dimension(70, 30));
         tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-        tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         // Styling tombol Hapus
-        hapusButton.setBackground(new Color(108, 117, 125));
+        hapusButton.setBackground(new Color(220, 53, 69));
         hapusButton.setForeground(Color.WHITE);
         hapusButton.setFocusPainted(false);
-        hapusButton.setPreferredSize(new Dimension(85, 30));
+        hapusButton.setPreferredSize(new Dimension(70, 30));
         hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-        hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         panel.add(terimaButton);
         panel.add(tolakButton);
@@ -363,7 +369,7 @@ class ButtonEditor extends DefaultCellEditor {
         this.parent = parent;
         
         panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0)); // Kurangi spacing antar button
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Kurangi spacing
         
         terimaButton = new JButton("Terima");
         tolakButton = new JButton("Tolak");
@@ -373,25 +379,25 @@ class ButtonEditor extends DefaultCellEditor {
         terimaButton.setBackground(new Color(40, 167, 69));
         terimaButton.setForeground(Color.WHITE);
         terimaButton.setFocusPainted(false);
-        terimaButton.setPreferredSize(new Dimension(85, 30));
+        terimaButton.setPreferredSize(new Dimension(70, 30));
         terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-        terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         // Styling tombol Tolak
         tolakButton.setBackground(new Color(220, 53, 69));
         tolakButton.setForeground(Color.WHITE);
         tolakButton.setFocusPainted(false);
-        tolakButton.setPreferredSize(new Dimension(85, 30));
+        tolakButton.setPreferredSize(new Dimension(70, 30));
         tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-        tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         // Styling tombol Hapus
         hapusButton.setBackground(new Color(108, 117, 125));
         hapusButton.setForeground(Color.WHITE);
         hapusButton.setFocusPainted(false);
-        hapusButton.setPreferredSize(new Dimension(85, 30));
+        hapusButton.setPreferredSize(new Dimension(70, 30));
         hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-        hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         terimaButton.addActionListener(new ActionListener() {
             @Override
