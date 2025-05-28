@@ -62,16 +62,16 @@ public class sku extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
         jLabel5.setText("Price");
 
-        btn_back.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
-        btn_back.setText("Back");
+        btn_back.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_back.setText("Kembali");
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
             }
         });
 
-        btn_submit.setFont(new java.awt.Font("Cambria Math", 0, 18)); // NOI18N
-        btn_submit.setText("Submit");
+        btn_submit.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_submit.setText("Simpan");
         btn_submit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_submitMouseClicked(evt);
@@ -91,19 +91,19 @@ public class sku extends javax.swing.JPanel {
                         .addGap(279, 279, 279)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(50, 50, 50)
+                            .addComponent(btn_back))
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(price, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                             .addComponent(description, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                             .addComponent(sku, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                            .addComponent(btn_submit, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(category, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(category, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_submit))))
                 .addContainerGap(599, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
