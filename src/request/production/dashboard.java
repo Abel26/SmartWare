@@ -14,8 +14,6 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,117 +29,6 @@ import utils.TableUtil;
 public class dashboard extends javax.swing.JPanel {
     private String usernameLogin;
     private javax.swing.JPanel utama;
-
-    // Tambahkan kelas ButtonRenderer dan ButtonEditor
-    private class ButtonRenderer implements TableCellRenderer {
-        private JPanel panel;
-        private JButton terimaButton;
-        private JButton tolakButton;
-
-        public ButtonRenderer() {
-            panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Kurangi spacing
-            
-            terimaButton = new JButton("Terima");
-            tolakButton = new JButton("Tolak");
-            
-            // Styling tombol Terima
-            terimaButton.setBackground(new Color(40, 167, 69));
-            terimaButton.setForeground(Color.WHITE);
-            terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(70, 30));
-            terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            // Styling tombol Tolak
-            tolakButton.setBackground(new Color(220, 53, 69));
-            tolakButton.setForeground(Color.WHITE);
-            tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(70, 30));
-            tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            panel.add(terimaButton);
-            panel.add(tolakButton);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            return panel;
-        }
-    }
-
-    private class ButtonEditor extends DefaultCellEditor {
-        private JPanel panel;
-        private JButton terimaButton;
-        private JButton tolakButton;
-        private String noProduction;
-        private boolean isPushed;
-
-        public ButtonEditor() {
-            super(new JCheckBox());
-            
-            panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-            
-            terimaButton = new JButton("Terima");
-            tolakButton = new JButton("Tolak");
-            
-            // Styling tombol Terima
-            terimaButton.setBackground(new Color(40, 167, 69));
-            terimaButton.setForeground(Color.WHITE);
-            terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(80, 30));
-            terimaButton.setFont(new Font("Arial", Font.BOLD, 12));
-            
-            // Styling tombol Tolak
-            tolakButton.setBackground(new Color(220, 53, 69));
-            tolakButton.setForeground(Color.WHITE);
-            tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(80, 30));
-            tolakButton.setFont(new Font("Arial", Font.BOLD, 12));
-            
-            terimaButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    updateStatus(noProduction, true);
-                }
-            });
-            
-            tolakButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    updateStatus(noProduction, false);
-                }
-            });
-            
-            panel.add(terimaButton);
-            panel.add(tolakButton);
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
-            noProduction = table.getValueAt(row, 0).toString();
-            isPushed = true;
-            return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            isPushed = false;
-            return "Aksi";
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            isPushed = false;
-            return super.stopCellEditing();
-        }
-    }
 
     /**
      * Creates new form dashboard
@@ -300,7 +187,6 @@ public class dashboard extends javax.swing.JPanel {
         table.addColumn("Deskripsi");
         table.addColumn("Kuantiti");
         table.addColumn("Status");
-        table.addColumn("Aksi");
         
         table_sales.setModel(table);
         
@@ -313,7 +199,6 @@ public class dashboard extends javax.swing.JPanel {
         table_sales.getColumnModel().getColumn(2).setPreferredWidth(250); // Deskripsi
         table_sales.getColumnModel().getColumn(3).setPreferredWidth(100); // Kuantiti
         table_sales.getColumnModel().getColumn(4).setPreferredWidth(150); // Status
-        table_sales.getColumnModel().getColumn(5).setPreferredWidth(200); // Aksi
 
         Connection conn = new connection().connect();
         if (conn == null) {
@@ -346,44 +231,14 @@ public class dashboard extends javax.swing.JPanel {
                     rs.getString("category_name"),
                     rs.getString("description"),
                     String.format("%,d", rs.getInt("qty")), // Format angka dengan pemisah ribuan
-                    statusText,
-                    "Aksi"
+                    statusText
                 };
                 table.addRow(row);
             }
 
-            // Set custom renderer dan editor untuk kolom Aksi
-            table_sales.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
-            table_sales.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor());
-
         } catch (SQLException e) {
             System.out.println("Error saat mengambil data dari database: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    public void updateStatus(String noProduction, boolean status) {
-        try {
-            Connection conn = new connection().connect();
-            if (conn != null) {
-                String sql = "UPDATE tb_production_request SET status = ? WHERE id = ?";
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setBoolean(1, status);
-                pstmt.setString(2, noProduction);
-                
-                int result = pstmt.executeUpdate();
-                if (result > 0) {
-                    JOptionPane.showMessageDialog(this, 
-                        "Status berhasil diubah menjadi " + (status ? "Diterima" : "Ditolak"));
-                    table(); // Refresh tabel
-                }
-                conn.close();
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, 
-                "Error mengubah status: " + ex.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
         }
     }
 
