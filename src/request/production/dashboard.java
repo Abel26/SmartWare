@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import reports.SalesReportGenerator;  // Perubahan import
 import reports.SimpleReportViewer;    // Import untuk alternatif
 import reports.ProductionReportGenerator;  // Implied import for ProductionReportGenerator
+import utils.TableUtil;
 
 /**
  *
@@ -39,7 +40,7 @@ public class dashboard extends javax.swing.JPanel {
 
         public ButtonRenderer() {
             panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Kurangi spacing
             
             terimaButton = new JButton("Terima");
             tolakButton = new JButton("Tolak");
@@ -48,15 +49,17 @@ public class dashboard extends javax.swing.JPanel {
             terimaButton.setBackground(new Color(40, 167, 69));
             terimaButton.setForeground(Color.WHITE);
             terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(80, 30));
-            terimaButton.setFont(new Font("Arial", Font.BOLD, 12));
+            terimaButton.setPreferredSize(new Dimension(70, 30));
+            terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
+            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             // Styling tombol Tolak
             tolakButton.setBackground(new Color(220, 53, 69));
             tolakButton.setForeground(Color.WHITE);
             tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(80, 30));
-            tolakButton.setFont(new Font("Arial", Font.BOLD, 12));
+            tolakButton.setPreferredSize(new Dimension(70, 30));
+            tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
+            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             panel.add(terimaButton);
             panel.add(tolakButton);
@@ -297,11 +300,20 @@ public class dashboard extends javax.swing.JPanel {
         table.addColumn("Deskripsi");
         table.addColumn("Kuantiti");
         table.addColumn("Status");
+        table.addColumn("Aksi");
         
         table_sales.setModel(table);
         
-        // Set tinggi baris
-        table_sales.setRowHeight(35);
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_sales, jScrollPane1);
+        
+        // Set lebar kolom
+        table_sales.getColumnModel().getColumn(0).setPreferredWidth(120); // No Production
+        table_sales.getColumnModel().getColumn(1).setPreferredWidth(150); // Kategori
+        table_sales.getColumnModel().getColumn(2).setPreferredWidth(250); // Deskripsi
+        table_sales.getColumnModel().getColumn(3).setPreferredWidth(100); // Kuantiti
+        table_sales.getColumnModel().getColumn(4).setPreferredWidth(150); // Status
+        table_sales.getColumnModel().getColumn(5).setPreferredWidth(200); // Aksi
 
         Connection conn = new connection().connect();
         if (conn == null) {
@@ -333,11 +345,16 @@ public class dashboard extends javax.swing.JPanel {
                     noProduction,
                     rs.getString("category_name"),
                     rs.getString("description"),
-                    rs.getString("qty"),
-                    statusText
+                    String.format("%,d", rs.getInt("qty")), // Format angka dengan pemisah ribuan
+                    statusText,
+                    "Aksi"
                 };
                 table.addRow(row);
             }
+
+            // Set custom renderer dan editor untuk kolom Aksi
+            table_sales.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+            table_sales.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor());
 
         } catch (SQLException e) {
             System.out.println("Error saat mengambil data dari database: " + e.getMessage());

@@ -22,6 +22,7 @@ import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import utils.TableUtil;
 
 /**
  *
@@ -48,14 +49,14 @@ public class DashboardSku extends javax.swing.JPanel {
         table.addColumn("Aksi");
         table_sku.setModel(table);
 
-        // Set tinggi baris
-        table_sku.setRowHeight(35);
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_sku, jScrollPane1);
         
         // Set lebar kolom
-        table_sku.getColumnModel().getColumn(0).setPreferredWidth(100); // SKU
-        table_sku.getColumnModel().getColumn(1).setPreferredWidth(120); // Category
-        table_sku.getColumnModel().getColumn(2).setPreferredWidth(200); // Deskripsi
-        table_sku.getColumnModel().getColumn(3).setPreferredWidth(100); // Price
+        table_sku.getColumnModel().getColumn(0).setPreferredWidth(120); // SKU
+        table_sku.getColumnModel().getColumn(1).setPreferredWidth(150); // Category
+        table_sku.getColumnModel().getColumn(2).setPreferredWidth(250); // Deskripsi
+        table_sku.getColumnModel().getColumn(3).setPreferredWidth(120); // Price
         table_sku.getColumnModel().getColumn(4).setPreferredWidth(100); // Aksi
 
         Connection conn = new connection().connect();
@@ -75,7 +76,7 @@ public class DashboardSku extends javax.swing.JPanel {
                     rs.getString("sku"),
                     rs.getString("category"),
                     rs.getString("description"),
-                    rs.getString("price"),
+                    String.format("Rp %,d", rs.getInt("price")), // Format currency
                     "Hapus"
                 };
                 table.addRow(row);
@@ -129,11 +130,12 @@ public class DashboardSku extends javax.swing.JPanel {
 
         public ButtonRenderer() {
             button = new JButton("Hapus");
-            button.setBackground(new Color(220, 53, 69));
+            button.setBackground(new Color(220, 53, 69)); // Red color #DC3545
             button.setForeground(Color.WHITE);
             button.setFocusPainted(false);
-            button.setFont(new Font("Arial", Font.BOLD, 12));
-            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            button.setPreferredSize(new Dimension(70, 30));
+            button.setFont(new Font("Arial", Font.BOLD, 11));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         }
 
         @Override
@@ -153,11 +155,12 @@ public class DashboardSku extends javax.swing.JPanel {
             super(new JCheckBox());
             
             button = new JButton("Hapus");
-            button.setBackground(new Color(220, 53, 69));
+            button.setBackground(new Color(220, 53, 69)); // Red color #DC3545
             button.setForeground(Color.WHITE);
             button.setFocusPainted(false);
-            button.setFont(new Font("Arial", Font.BOLD, 12));
-            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            button.setPreferredSize(new Dimension(70, 30));
+            button.setFont(new Font("Arial", Font.BOLD, 11));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             
             button.addActionListener(new ActionListener() {
                 @Override

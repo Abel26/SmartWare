@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import reports.SalesReportGenerator;  // Perubahan import
 import reports.SimpleReportViewer;    // Import untuk alternatif
+import utils.TableUtil;
 
 /**
  *
@@ -185,7 +186,23 @@ public class dashboard extends javax.swing.JPanel {
         table.addColumn("Diskon");
         table.addColumn("Total Harga");
         table.addColumn("Status");
+        
         table_sales.setModel(table);
+        
+        // Apply custom table styling
+        utils.TableUtil.applyCustomTable(table_sales, jScrollPane1);
+        
+        // Set lebar kolom
+        table_sales.getColumnModel().getColumn(0).setPreferredWidth(100);  // No Sales
+        table_sales.getColumnModel().getColumn(1).setPreferredWidth(120);  // Waktu
+        table_sales.getColumnModel().getColumn(2).setPreferredWidth(200);  // Deskripsi
+        table_sales.getColumnModel().getColumn(3).setPreferredWidth(120);  // Operator
+        table_sales.getColumnModel().getColumn(4).setPreferredWidth(120);  // Tujuan
+        table_sales.getColumnModel().getColumn(5).setPreferredWidth(80);   // Kuantiti
+        table_sales.getColumnModel().getColumn(6).setPreferredWidth(100);  // Harga
+        table_sales.getColumnModel().getColumn(7).setPreferredWidth(80);   // Diskon
+        table_sales.getColumnModel().getColumn(8).setPreferredWidth(120);  // Total Harga
+        table_sales.getColumnModel().getColumn(9).setPreferredWidth(120);  // Status
 
         Connection conn = new connection().connect();
         if (conn == null) {
@@ -199,23 +216,37 @@ public class dashboard extends javax.swing.JPanel {
                  "LEFT JOIN tb_users AS u ON s.id_operator = u.id " +
                  "LEFT JOIN tb_partner AS p ON s.id_partner = p.id";
 
-
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
+                String noSales = rs.getString("no_sales");
+                Object status = rs.getObject("status");
+                String statusText;
+                
+                if (status == null) {
+                    statusText = "Menunggu Persetujuan";
+                } else {
+                    boolean statusBool = rs.getBoolean("status");
+                    statusText = statusBool ? "Diterima" : "Ditolak";
+                }
+                
+                // Format currency and numbers
+                double price = rs.getDouble("price");
+                double discount = rs.getDouble("discount");
+                double total = rs.getDouble("total");
+                
                 Object[] row = {
-                    rs.getString("no_sales"),       
+                    noSales,       
                     rs.getString("date"),          
                     rs.getString("deskripsi"),     
                     rs.getString("operator_name"), 
                     rs.getString("partner_name"),    
                     rs.getInt("qty"),              
-                    rs.getDouble("price"),         
-                    rs.getDouble("discount"),      
-                    rs.getDouble("total"),
-                    rs.getObject("status") == null ? "Menunggu Persetujuan" : 
-                        (rs.getBoolean("status") ? "Diterima" : "Ditolak")
+                    String.format("Rp %,.0f", price),         
+                    String.format("%.1f%%", discount),      
+                    String.format("Rp %,.0f", total),
+                    statusText
                 };
                 table.addRow(row);
             }

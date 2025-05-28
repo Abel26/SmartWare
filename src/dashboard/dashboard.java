@@ -165,7 +165,7 @@ public class dashboard extends javax.swing.JFrame {
         ImageIcon iconStock = new ImageIcon(getClass().getResource("/assets/img/stock.png"));
 
         
-        item stock = new item(null, true, iconStock, "Production", null);
+//        item stock = new item(null, true, iconStock, "Production", null);
 
         item createRequest = new item(null, true, iconRequest, "Sales Request", new ActionListener() {
             @Override
@@ -207,7 +207,15 @@ public class dashboard extends javax.swing.JFrame {
             }
         });
         
-        item stockManagement = new item(iconStockManagement, false, null, "Stock Management", null, stock); 
+        item stockManagement = new item(iconStockManagement, false, null, "Dashboard", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                utama.removeAll();
+                utama.add(new index1(usernameLogin));
+                utama.repaint();
+                utama.revalidate();
+            }
+        }); 
         item request = new item(iconRequest, false, null, "Request", null, createRequest, productionRequest); 
         item production = new item(iconProduction, false, null, "Production", null,accRequestSales, accRequestProduction); 
         item sku = new item(iconSku, false, null, "SKU", new ActionListener() {
