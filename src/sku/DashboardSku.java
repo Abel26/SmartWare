@@ -10,11 +10,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -38,7 +45,18 @@ public class DashboardSku extends javax.swing.JPanel {
         table.addColumn("Category");
         table.addColumn("Deskripsi");
         table.addColumn("Price");
+        table.addColumn("Aksi");
         table_sku.setModel(table);
+
+        // Set tinggi baris
+        table_sku.setRowHeight(35);
+        
+        // Set lebar kolom
+        table_sku.getColumnModel().getColumn(0).setPreferredWidth(100); // SKU
+        table_sku.getColumnModel().getColumn(1).setPreferredWidth(120); // Category
+        table_sku.getColumnModel().getColumn(2).setPreferredWidth(200); // Deskripsi
+        table_sku.getColumnModel().getColumn(3).setPreferredWidth(100); // Price
+        table_sku.getColumnModel().getColumn(4).setPreferredWidth(100); // Aksi
 
         Connection conn = new connection().connect();
         if (conn == null) {
@@ -54,16 +72,120 @@ public class DashboardSku extends javax.swing.JPanel {
 
             while (rs.next()) {
                 Object[] row = {
-                    rs.getString("sku"),       // No Sales
-                    rs.getString("category"),          // Waktu
-                    rs.getString("description"),     // Deskripsi
+                    rs.getString("sku"),
+                    rs.getString("category"),
+                    rs.getString("description"),
                     rs.getString("price"),
+                    "Hapus"
                 };
                 table.addRow(row);
             }
+
+            // Set custom renderer dan editor untuk kolom Aksi
+            table_sku.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
+            table_sku.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor());
+
         } catch (SQLException e) {
             System.out.println("Error saat mengambil data dari database: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void deleteData(String sku) {
+        try {
+            Connection conn = new connection().connect();
+            if (conn != null) {
+                // Konfirmasi penghapusan
+                int confirm = JOptionPane.showConfirmDialog(this,
+                    "Apakah Anda yakin ingin menghapus SKU ini?",
+                    "Konfirmasi Hapus",
+                    JOptionPane.YES_NO_OPTION);
+                
+                if (confirm == JOptionPane.YES_OPTION) {
+                    String sql = "DELETE FROM tb_sku WHERE sku = ?";
+                    PreparedStatement pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, sku);
+                    
+                    int result = pstmt.executeUpdate();
+                    if (result > 0) {
+                        JOptionPane.showMessageDialog(this, 
+                            "SKU berhasil dihapus");
+                        table(); // Refresh tabel
+                    }
+                }
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Error menghapus SKU: " + ex.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Inner class untuk render button
+    private class ButtonRenderer implements TableCellRenderer {
+        private JButton button;
+
+        public ButtonRenderer() {
+            button = new JButton("Hapus");
+            button.setBackground(new Color(220, 53, 69));
+            button.setForeground(Color.WHITE);
+            button.setFocusPainted(false);
+            button.setFont(new Font("Arial", Font.BOLD, 12));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            return button;
+        }
+    }
+
+    // Inner class untuk edit button
+    private class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+        private String sku;
+        private boolean isPushed;
+
+        public ButtonEditor() {
+            super(new JCheckBox());
+            
+            button = new JButton("Hapus");
+            button.setBackground(new Color(220, 53, 69));
+            button.setForeground(Color.WHITE);
+            button.setFocusPainted(false);
+            button.setFont(new Font("Arial", Font.BOLD, 12));
+            button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                    deleteData(sku);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            sku = table.getValueAt(row, 0).toString();
+            isPushed = true;
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            isPushed = false;
+            return "Hapus";
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
         }
     }
 
