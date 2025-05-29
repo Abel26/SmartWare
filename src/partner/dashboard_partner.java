@@ -20,6 +20,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import utils.TableUtil;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -202,6 +206,7 @@ public class dashboard_partner extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_partner = new javax.swing.JTable();
         btn_buat_partner = new javax.swing.JButton();
+        btn_cetak = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -229,6 +234,14 @@ public class dashboard_partner extends javax.swing.JPanel {
             }
         });
 
+        btn_cetak.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_cetak.setText("Cetak Laporan");
+        btn_cetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -236,7 +249,10 @@ public class dashboard_partner extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_buat_partner, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_cetak)
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_buat_partner, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 998, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -248,7 +264,9 @@ public class dashboard_partner extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
                 .addGap(1, 1, 1)
-                .addComponent(btn_buat_partner, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_buat_partner, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cetak, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(90, 90, 90)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(128, Short.MAX_VALUE))
@@ -269,30 +287,34 @@ public class dashboard_partner extends javax.swing.JPanel {
 
     private void btn_cetakActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            // Coba cek apakah JasperReport tersedia
-            Class.forName("net.sf.jasperreports.engine.JasperReport");
+            String reportPath = "src/report/LaporanPartner.jrxml";
+            Connection conn = new connection().connect();
             
-            // Jika berhasil, tampilkan laporan dengan JasperReports
-            PartnerReportGenerator reportGenerator = new PartnerReportGenerator();
-            reportGenerator.showPartnerReport();
+            // Compile terlebih dahulu jrxml menjadi jasper
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportPath);
             
-        } catch (ClassNotFoundException e) {
-            // JasperReport tidak tersedia, tampilkan pesan error
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Library JasperReports tidak ditemukan.\nSilakan instal library JasperReports terlebih dahulu.",
-                "Library Tidak Tersedia",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            // Error lain
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Error: " + e.getMessage(),
+            // Parameter, jika tidak ada parameter gunakan null atau HashMap kosong
+            Map<String, Object> parameters = new HashMap<>();
+            
+            // Mengisi Report dengan data dari database
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+            
+            // Menampilkan jasperviewer
+            JasperViewer viewer = new JasperViewer(jasperPrint, false);
+            viewer.setVisible(true);
+            
+        } catch (JRException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                "Error saat membuat laporan: " + e.getMessage(),
                 "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_buat_partner;
+    private javax.swing.JButton btn_cetak;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table_partner;
