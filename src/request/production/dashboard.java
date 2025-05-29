@@ -38,43 +38,6 @@ public class dashboard extends javax.swing.JPanel {
         private JButton tolakButton;
         private JButton hapusButton;
 
-        public ButtonRenderer() {
-            panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            
-            terimaButton = new JButton("Terima");
-            tolakButton = new JButton("Tolak");
-            hapusButton = new JButton("Hapus");
-            
-            // Styling tombol Terima
-            terimaButton.setBackground(new Color(40, 167, 69));
-            terimaButton.setForeground(Color.WHITE);
-            terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(70, 30));
-            terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            // Styling tombol Tolak
-            tolakButton.setBackground(new Color(220, 53, 69));
-            tolakButton.setForeground(Color.WHITE);
-            tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(70, 30));
-            tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            // Styling tombol Hapus
-            hapusButton.setBackground(new Color(108, 117, 125));
-            hapusButton.setForeground(Color.WHITE);
-            hapusButton.setFocusPainted(false);
-            hapusButton.setPreferredSize(new Dimension(70, 30));
-            hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-            hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            panel.add(terimaButton);
-            panel.add(tolakButton);
-            panel.add(hapusButton);
-        }
-
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
@@ -96,8 +59,9 @@ public class dashboard extends javax.swing.JPanel {
         private String noProduction;
 
         public ButtonEditor() {
-            super(new JCheckBox());
+            super(new JCheckBox()); // DefaultCellEditor needs a component in constructor
             
+            // Initialize panel and buttons
             panel = new JPanel();
             panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
             
@@ -105,48 +69,29 @@ public class dashboard extends javax.swing.JPanel {
             tolakButton = new JButton("Tolak");
             hapusButton = new JButton("Hapus");
             
-            // Styling tombol Terima
-            terimaButton.setBackground(new Color(40, 167, 69));
-            terimaButton.setForeground(Color.WHITE);
-            terimaButton.setFocusPainted(false);
-            terimaButton.setPreferredSize(new Dimension(70, 30));
-            terimaButton.setFont(new Font("Arial", Font.BOLD, 11));
-            terimaButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            // Styling tombol Tolak
-            tolakButton.setBackground(new Color(220, 53, 69));
-            tolakButton.setForeground(Color.WHITE);
-            tolakButton.setFocusPainted(false);
-            tolakButton.setPreferredSize(new Dimension(70, 30));
-            tolakButton.setFont(new Font("Arial", Font.BOLD, 11));
-            tolakButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
-            // Styling tombol Hapus
-            hapusButton.setBackground(new Color(108, 117, 125));
-            hapusButton.setForeground(Color.WHITE);
-            hapusButton.setFocusPainted(false);
-            hapusButton.setPreferredSize(new Dimension(70, 30));
-            hapusButton.setFont(new Font("Arial", Font.BOLD, 11));
-            hapusButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
+            // Add action listeners
             terimaButton.addActionListener(e -> {
+                // Handle terima action
                 fireEditingStopped();
-                parent.updateStatus(noProduction, true);
             });
             
             tolakButton.addActionListener(e -> {
+                // Handle tolak action
                 fireEditingStopped();
-                parent.updateStatus(noProduction, false);
             });
             
             hapusButton.addActionListener(e -> {
-                fireEditingStopped();
                 deleteData(noProduction);
+                fireEditingStopped();
             });
             
+            // Add buttons to panel
             panel.add(terimaButton);
             panel.add(tolakButton);
             panel.add(hapusButton);
+            
+            // Set panel to be transparent
+            panel.setOpaque(false);
         }
 
         @Override
@@ -154,11 +99,6 @@ public class dashboard extends javax.swing.JPanel {
                 boolean isSelected, int row, int column) {
             noProduction = table.getValueAt(row, 0).toString();
             return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return "Aksi";
         }
     }
 
@@ -313,38 +253,25 @@ public class dashboard extends javax.swing.JPanel {
     }
 
     public void table() {
-        DefaultTableModel table = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                // Hanya kolom aksi yang bisa di-edit
-                return column == 5;
-            }
-        };
+        DefaultTableModel table = new DefaultTableModel();
         
         table.addColumn("No Production");
         table.addColumn("Kategori");
         table.addColumn("Deskripsi");
         table.addColumn("Kuantiti");
         table.addColumn("Status");
-        table.addColumn("Aksi");
         
         table_sales.setModel(table);
         
-        // Apply custom table styling
         utils.TableUtil.applyCustomTable(table_sales, jScrollPane1);
         
-        // Set lebar kolom
         table_sales.getColumnModel().getColumn(0).setPreferredWidth(120); // No Production
         table_sales.getColumnModel().getColumn(1).setPreferredWidth(150); // Kategori
         table_sales.getColumnModel().getColumn(2).setPreferredWidth(250); // Deskripsi
         table_sales.getColumnModel().getColumn(3).setPreferredWidth(100); // Kuantiti
         table_sales.getColumnModel().getColumn(4).setPreferredWidth(150); // Status
-        table_sales.getColumnModel().getColumn(5).setPreferredWidth(250); // Aksi - Perlebar untuk 3 tombol
 
-        // Set tinggi baris
-        table_sales.setRowHeight(40); // Tinggi baris yang cukup untuk tombol
-
-        // Nonaktifkan perpindahan kolom
+        table_sales.setRowHeight(40);
         table_sales.getTableHeader().setReorderingAllowed(false);
 
         Connection conn = new connection().connect();
@@ -378,17 +305,11 @@ public class dashboard extends javax.swing.JPanel {
                     rs.getString("category_name"),
                     rs.getString("description"),
                     String.format("%,d", rs.getInt("qty")),
-                    statusText,
-                    "Aksi" // Kolom untuk tombol
+                    statusText
                 };
                 table.addRow(row);
             }
 
-            // Set custom renderer dan editor untuk kolom Aksi
-            table_sales.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
-            table_sales.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor());
-
-            // Atur ulang preferred size untuk scrollpane
             jScrollPane1.setPreferredSize(new Dimension(
                 jScrollPane1.getPreferredSize().width,
                 table_sales.getRowHeight() * Math.min(table_sales.getRowCount() + 1, 10)

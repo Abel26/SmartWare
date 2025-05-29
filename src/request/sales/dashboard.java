@@ -244,7 +244,7 @@ public class dashboard extends javax.swing.JPanel {
                     rs.getString("partner_name"),    
                     rs.getInt("qty"),              
                     String.format("Rp %,.0f", price),         
-                    String.format("%.1f%%", discount),      
+                    String.format("%,.0f", discount),      
                     String.format("Rp %,.0f", total),
                     statusText
                 };

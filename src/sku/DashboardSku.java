@@ -205,6 +205,7 @@ public class DashboardSku extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_sku = new javax.swing.JTable();
         btn_buat_sku = new javax.swing.JButton();
+        btn_cetak = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -232,6 +233,14 @@ public class DashboardSku extends javax.swing.JPanel {
             }
         });
 
+        btn_cetak.setFont(new java.awt.Font("Cambria Math", 1, 18)); // NOI18N
+        btn_cetak.setText("Cetak Laporan");
+        btn_cetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -239,7 +248,10 @@ public class DashboardSku extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_buat_sku)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_cetak)
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_buat_sku))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 869, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -251,7 +263,9 @@ public class DashboardSku extends javax.swing.JPanel {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
-                .addComponent(btn_buat_sku, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_buat_sku, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cetak, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(66, 66, 66)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(259, Short.MAX_VALUE))
@@ -294,6 +308,7 @@ public class DashboardSku extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_buat_sku;
+    private javax.swing.JButton btn_cetak;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table_sku;

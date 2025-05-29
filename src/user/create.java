@@ -52,7 +52,7 @@ public class create extends javax.swing.JPanel {
         password = new javax.swing.JPasswordField();
         back = new javax.swing.JToggleButton();
         save = new javax.swing.JToggleButton();
-        birth_date = new com.toedter.calendar.JCalendar();
+        birth_date = new com.toedter.calendar.JDateChooser();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -209,7 +209,15 @@ public class create extends javax.swing.JPanel {
             stmt.setString(1, name.getText());
             stmt.setString(2, gender.getSelectedItem().toString());
             stmt.setString(3, birth_place.getText());
-            stmt.setString(4, birth_date.getDate().toString()); 
+            
+            java.util.Date utilDate = birth_date.getDate();
+            if (utilDate != null) {
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                stmt.setDate(4, sqlDate);
+            } else {
+                throw new Exception("Tanggal lahir harus diisi!");
+            }
+            
             stmt.setInt(5, id_role);
             stmt.setString(6, username.getText());
             stmt.setString(7, passwordHash(new String(password.getPassword())));
@@ -218,7 +226,7 @@ public class create extends javax.swing.JPanel {
 
             JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
         } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan" + e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan: " + e.getMessage());
         }
     }
 
@@ -257,7 +265,7 @@ public class create extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton back;
-    private com.toedter.calendar.JCalendar birth_date;
+    private com.toedter.calendar.JDateChooser birth_date;
     private javax.swing.JTextField birth_place;
     private javax.swing.JComboBox<String> gender;
     private com.toedter.calendar.JCalendar jCalendar1;
